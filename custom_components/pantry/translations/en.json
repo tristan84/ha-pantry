@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up My Pantry",
+        "description": "This adds a **My Pantry** item to your sidebar and creates a private store for your inventory. Nothing to configure — just press Submit."
+      }
+    },
+    "abort": {
+      "already_configured": "My Pantry is already set up."
+    }
+  }
+}
