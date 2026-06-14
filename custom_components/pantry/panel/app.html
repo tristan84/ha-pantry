@@ -106,9 +106,10 @@ select.fi option{background:var(--s2)}
 .ecats::-webkit-scrollbar{display:none}
 .ecat{flex-shrink:0;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;padding:4px 10px;border-radius:12px;background:var(--s3)}
 .ecat.on{color:var(--accent);background:rgba(48,209,88,0.15)}
-.egrid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
-.eo{height:38px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;border-radius:8px;border:2px solid transparent}
-.eo.sel{border-color:var(--accent);background:rgba(48,209,88,0.12)}
+.egrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.eo{min-height:42px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;border-radius:9px;border:2px solid transparent;background:var(--s3);padding:7px 6px;line-height:1.15}
+.eo.sel{border-color:var(--accent);background:rgba(48,209,88,0.14);color:var(--accent)}
+.iconbadge{display:flex;align-items:center;justify-content:center;text-align:center;width:100%;height:100%;font-weight:700;line-height:1.05;overflow:hidden;word-break:break-word;padding:2px}
 .brow{display:flex;gap:8px;margin-top:18px}
 .btn{flex:1;padding:13px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none}
 .btn:active{opacity:0.8;transform:scale(0.97)}
@@ -130,9 +131,33 @@ select.fi option{background:var(--s2)}
 .scl{position:absolute;top:48px;right:18px;width:40px;height:40px;background:rgba(0,0,0,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;z-index:2}
 .slbl{color:rgba(255,255,255,0.7);font-size:14px;margin-top:22px;position:relative;z-index:1}
 .sbot{position:absolute;bottom:40px;z-index:2}
+/* Premium hero + category theming */
+.hero{position:relative;margin:12px 16px 10px;border-radius:24px;padding:20px;overflow:hidden;background:linear-gradient(135deg,rgba(6,28,22,0.72),rgba(7,18,26,0.86)),url("/pantry-assets/header.jpg");background-size:cover;background-position:center;border:1px solid var(--border2);box-shadow:var(--shadow)}
+#bgLayer{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;opacity:0;transition:opacity .5s ease;pointer-events:none;filter:saturate(0.85) blur(1px)}
+#bgScrim{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(11,12,14,0.46) 0%,rgba(11,12,14,0.66) 52%,rgba(11,12,14,0.86) 100%);opacity:0;transition:opacity .5s ease;pointer-events:none}
+.page{position:relative;z-index:1}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(42px);pointer-events:none}
+.hb1{width:190px;height:190px;background:#10b981;opacity:.5;top:-70px;right:-40px}
+.hb2{width:150px;height:150px;background:#0a84ff;opacity:.32;bottom:-60px;left:-30px}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,0.5)}
+.hero-title{font-size:30px;font-weight:700;letter-spacing:-1px;margin:3px 0 16px;color:#fff}
+.hero-stats{display:flex;gap:8px}
+.hstat{flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:10px 12px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.hstat .n{font-size:21px;font-weight:700;line-height:1}
+.hstat .l{font-size:10.5px;color:rgba(255,255,255,0.6);margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
+.hstat.ok .n{color:#41e0a3}.hstat.low .n{color:var(--warn)}.hstat.out .n{color:var(--danger)}
+.cat-card{position:relative}
+.cat-ico{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:12px}
+.cat-glow{position:absolute;inset:0;pointer-events:none}
+.pbanner{position:relative;margin:12px 16px 6px;border-radius:20px;padding:16px 18px;overflow:hidden;display:flex;align-items:center;gap:14px;border:1px solid var(--border2);box-shadow:var(--shadow)}
+.pb-ico{font-size:30px;width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pb-title{font-size:20px;font-weight:700;letter-spacing:-.4px}
+.pb-sub{font-size:13px;color:var(--muted);margin-top:2px}
 </style>
 </head>
 <body>
+<div id="bgLayer"></div><div id="bgScrim"></div>
 
 <div class="hdr">
   <div class="back" id="backBtn" onclick="goBack()">‹</div>
@@ -140,12 +165,20 @@ select.fi option{background:var(--s2)}
   <div class="hbtns">
     <button class="hbtn" id="sortBtn" style="display:none" onclick="nextSort()">↕</button>
     <button class="hbtn" onclick="openCatMgr()">⚙︎</button>
-    <button class="hbtn" onclick="doExport()">⬆</button>
+    <button class="hbtn" onclick="openBackup()">💾</button>
   </div>
 </div>
 
 <!-- HOME PAGE -->
 <div class="page on" id="pgHome">
+  <div class="hero" id="hero">
+    <div class="hero-blob hb1"></div><div class="hero-blob hb2"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Kitchen inventory</div>
+      <div class="hero-title">My Pantry</div>
+      <div class="hero-stats" id="heroStats"></div>
+    </div>
+  </div>
   <div class="srch-wrap"><span class="srch-ico">🔍</span><input class="srch" id="homeSearch" type="search" placeholder="Search all items…" oninput="onSearch()" autocomplete="off"></div>
   <div class="chips" id="homeChips"></div>
   <div class="grid" id="homeGrid"></div>
@@ -154,12 +187,14 @@ select.fi option{background:var(--s2)}
 
 <!-- SUB-CATEGORY PAGE (for cats with subs) -->
 <div class="page" id="pgSub">
+  <div id="subBanner" class="pbanner" style="display:none"></div>
   <div class="chips" id="subChips"></div>
   <div class="grid" id="subGrid"></div>
 </div>
 
 <!-- ITEMS PAGE -->
 <div class="page" id="pgItems">
+  <div id="itemsBanner" class="pbanner" style="display:none"></div>
   <div class="filters" id="itemFilters"></div>
   <div class="items" id="itemsList"></div>
 </div>
@@ -187,6 +222,21 @@ select.fi option{background:var(--s2)}
     <div class="fg" id="bcRow" style="display:none"><label class="fl">Barcode</label><input class="fi" id="fbc" type="text" readonly></div>
     <div class="brow"><button class="btn btn-s" onclick="closeSheet()">Cancel</button><button class="btn btn-p" onclick="saveItem()">Save</button></div>
     <div id="delRow" style="display:none"><button class="btn btn-d" onclick="delItem()">🗑 Delete</button></div>
+  </div>
+</div>
+
+<!-- Backup & Restore -->
+<div class="ov" id="bakOv" onclick="closeBackup()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="drag"></div>
+    <div class="stitle">Backup &amp; Restore</div>
+    <div class="fg"><label class="fl">Save a backup</label>
+      <div class="brow" style="margin-top:0"><button class="btn btn-s" onclick="downloadBackup()">💾 Full backup file</button><button class="btn btn-s" onclick="doExport()">⬇ Export CSV</button></div></div>
+    <div class="fg"><label class="fl">Restore from a file</label>
+      <button class="btn btn-s" style="width:100%" onclick="document.getElementById('file_bak').click()">📂 Choose backup or CSV…</button>
+      <input type="file" accept=".json,.csv,application/json,text/csv" id="file_bak" style="display:none" onchange="onBackupFile(event)"></div>
+    <div class="fg"><label class="fl">Automatic backups (this device)</label><div id="bakList"></div></div>
+    <div class="brow"><button class="btn btn-p" onclick="closeBackup()">Done</button></div>
   </div>
 </div>
 
@@ -249,8 +299,8 @@ const DEFAULT_STRUCTURE = [
     subs:[
       {id:'freezer_chicken', label:'Chicken',  emoji:'🍗'},
       {id:'freezer_beef',    label:'Beef',     emoji:'🥩'},
-      {id:'freezer_pork',    label:'Pork',     emoji:'🐷'},
-      {id:'freezer_lamb',    label:'Lamb',     emoji:'🐑'},
+      {id:'freezer_pork',    label:'Pork',     emoji:'🥓'},
+      {id:'freezer_lamb',    label:'Lamb',     emoji:'🍖'},
       {id:'freezer_seafood', label:'Seafood',  emoji:'🦐'},
       {id:'freezer_veg', label:'Veg', emoji:'🥦'},
       {id:'freezer_meals',   label:'Meals',    emoji:'🍕'},
@@ -293,16 +343,20 @@ const DEFAULT_STRUCTURE = [
   { id:'other',    label:'Other',    emoji:'📦',  color:'#8e8e93', subs:[] },
 ];
 
-const EMOJI_CATS = {
-  'Meat':['🥩','🍗','🐷','🐑','🦐','🐟','🦴','🍖','🥓','🐄','🦞','🦀','🐙','🦑','🍣','🍤'],
-  'Dairy':['🧀','🥚','🥛','🧈','🍦','🫙','🍮'],
-  'Veg':['🥦','🥕','🧅','🥔','🌽','🍅','🥑','🫑','🧄','🥒','🍋','🍎','🍌','🍇','🍓','🫐','🍊','🍑','🥝','🍆'],
-  'Pantry':['🥫','🍞','🌾','🍚','🍝','🫘','🥜','🍯','🫒','🧂','🌶️','🫙','🥣','🍪','🍫','🍬','🧁'],
-  'Drinks':['🥤','🧃','☕','🍵','🧋','🍶','🥛','💧','🧉','🍺','🍷','🍾','🫖'],
-  'Snacks':['🍿','🥨','🍟','🧆','🫔','🥪','🍕','🌮','🥐','🧇','🥞','🍔','🌯'],
-  'Health':['💊','💉','🩹','🧴','🪥','🧻','🩺'],
-  'Clean':['🧹','🧺','🫧','🧼','🪣','🧽','🪒','🗑️'],
-  'Other':['📦','🛒','🔑','🪝','🧲','💡','🔋','🪴','🐾','🎁','🍱','🫕'],
+// Word/label icons — reliable on every device (no emoji-font tofu). Stored verbatim in item.e
+const ICON_WORDS = {
+  'Meat':['Beef','Chicken','Pork','Lamb','Mince','Bacon','Ham','Sausage','Fish','Seafood'],
+  'Dairy':['Cheese','Milk','Eggs','Butter','Yoghurt','Cream'],
+  'Veg':['Veg','Carrot','Onion','Potato','Tomato','Salad','Herbs','Mushroom','Pepper','Corn'],
+  'Fruit':['Fruit','Apple','Banana','Berries','Citrus','Grapes','Melon'],
+  'Pantry':['Cans','Pasta','Rice','Flour','Sauce','Oil','Spices','Cereal','Beans','Nuts'],
+  'Bakery':['Bread','Buns','Wraps','Pastry','Cake'],
+  'Drinks':['Water','Juice','Soda','Coffee','Tea','Beer','Wine'],
+  'Snacks':['Chips','Crackers','Biscuits','Chocolate','Sweets','Popcorn'],
+  'Frozen':['Frozen','Ice Cream','Pizza','Fries'],
+  'Health':['Meds','Vitamins','First Aid'],
+  'Cleaning':['Cleaner','Soap','Paper','Laundry'],
+  'Other':['Other','Pet','Baby','Misc'],
 };
 
 function cloneStruct(s){ return JSON.parse(JSON.stringify(s)); }
@@ -312,6 +366,12 @@ let inv=[], barcodes={}, editId=null, sortMode='name', eCatSel=null;
 let navStack=[{type:'home'}];
 
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2); }
+function hexRgb(h){ h=(h||'#888888').replace('#',''); if(h.length===3)h=h.split('').map(x=>x+x).join(''); const n=parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function tint(h,a){ const c=hexRgb(h); return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'; }
+const ASSET='/pantry-assets/';
+const BG={freezer:'freezer.jpg',fridge:'fridge.jpg',pantry:'pantry.jpg',fruitveg:'fruitveg.jpg',dairy:'dairy.jpg',drinks:'drinks.jpg',snacks:'snacks.jpg',meds:'meds.jpg',cleaning:'cleaning.jpg',other:'other.jpg'};
+function setBg(catId){ const bl=document.getElementById('bgLayer'),sc=document.getElementById('bgScrim'); const f=catId&&BG[catId]; if(f){ bl.style.backgroundImage='url("'+ASSET+f+'")'; bl.style.opacity='1'; sc.style.opacity='1'; } else { bl.style.opacity='0'; sc.style.opacity='0'; } }
+function paintBanner(elId,emoji,title,sub,color){ const el=document.getElementById(elId); if(!el)return; el.style.display='flex'; el.style.background='linear-gradient(135deg,'+tint(color,0.30)+','+tint(color,0.07)+' 70%, rgba(255,255,255,0.02))'; el.style.borderColor=tint(color,0.35); el.style.boxShadow='0 16px 34px -20px '+tint(color,0.9); el.innerHTML='<div class="pb-ico" style="background:'+tint(color,0.22)+';border:1px solid '+tint(color,0.4)+'">'+emoji+'</div><div><div class="pb-title">'+title+'</div><div class="pb-sub">'+sub+'</div></div>'; }
 function getCat(id){ return STRUCTURE.find(c=>c.id===id); }
 function getSub(catId,subId){ return getCat(catId)?.subs.find(s=>s.id===subId); }
 function hasSubs(catId){ return (getCat(catId)?.subs.length||0)>0; }
@@ -344,6 +404,7 @@ function saveData(){
   localStorage.setItem(BKEY,JSON.stringify(barcodes));
   localStorage.setItem(KEY+'_struct',JSON.stringify(STRUCTURE));
   localStorage.setItem(KEY+'_ts', Date.now());
+  autoBackup();
   // Try HA sync in background - failure is ok, local data is safe
   clearTimeout(syncPending);
   syncPending=setTimeout(syncToHA,2000);
@@ -392,6 +453,8 @@ function showHome(){
   document.getElementById('homeSearch').value='';
   document.getElementById('searchResults').style.display='none';
   document.getElementById('homeGrid').style.display='';
+  const h=document.getElementById('hero'); if(h)h.style.display='';
+  setBg(null);
   renderHomeChips();
   renderHomeGrid();
 }
@@ -400,10 +463,12 @@ function renderHomeChips(){
   const low=inv.filter(i=>status(i)==='low').length;
   const out=inv.filter(i=>status(i)==='out').length;
   const ok=inv.filter(i=>status(i)==='ok').length;
-  document.getElementById('homeChips').innerHTML=
-    `<div class="chip ok">✅ ${ok} in stock</div>`+
-    (low?`<div class="chip warn">⚠️ ${low} low</div>`:'')+
-    (out?`<div class="chip danger">❌ ${out} out</div>`:'');
+  const el=document.getElementById('heroStats');
+  if(el) el.innerHTML=
+    `<div class="hstat ok"><div class="n">${ok}</div><div class="l">In stock</div></div>`+
+    `<div class="hstat low"><div class="n">${low}</div><div class="l">Low</div></div>`+
+    `<div class="hstat out"><div class="n">${out}</div><div class="l">Out</div></div>`;
+  const hc=document.getElementById('homeChips'); if(hc) hc.innerHTML='';
 }
 
 function renderHomeGrid(){
@@ -416,9 +481,9 @@ function renderHomeGrid(){
     const inStock=allItems.filter(i=>i.q>0).length;
     const bc=catOut?'badge-danger':catLow?'badge-warn':'badge-ok';
     const bv=catOut||catLow||inStock;
-    return`<div class="card" onclick="navCat('${cat.id}')">
-      <div class="card-stripe" style="background:${cat.color}"></div>
-      <span class="card-ico">${cat.emoji}</span>
+    return`<div class="card cat-card" style="background:linear-gradient(155deg,${tint(cat.color,0.22)},${tint(cat.color,0.05)} 62%,rgba(255,255,255,0.02));border-color:${tint(cat.color,0.30)};box-shadow:0 16px 32px -20px ${tint(cat.color,0.95)}" onclick="navCat('${cat.id}')">
+      <div class="cat-glow" style="background:radial-gradient(120px 90px at 75% 12%, ${tint(cat.color,0.45)}, transparent 70%)"></div>
+      <div class="cat-ico" style="background:${tint(cat.color,0.20)};border:1px solid ${tint(cat.color,0.38)}">${cat.emoji}</div>
       <div class="card-name">${cat.label}</div>
       <div class="card-sub">${allItems.length} item${allItems.length!==1?'s':''}</div>
       ${allItems.length?`<div class="card-badge ${bc}">${bv}</div>`:''}
@@ -442,8 +507,9 @@ function onSearch(){
   const grid=document.getElementById('homeGrid');
   const results=document.getElementById('searchResults');
   const chips=document.getElementById('homeChips');
-  if(!q){ grid.style.display=''; results.style.display='none'; chips.style.display=''; return; }
-  grid.style.display='none'; chips.style.display='none'; results.style.display='';
+  const hero=document.getElementById('hero');
+  if(!q){ grid.style.display=''; results.style.display='none'; chips.style.display=''; if(hero)hero.style.display=''; return; }
+  grid.style.display='none'; chips.style.display='none'; results.style.display=''; if(hero)hero.style.display='none';
   const found=inv.filter(i=>i.n.toLowerCase().includes(q));
   results.innerHTML=found.length?found.map(i=>itemHTML(i)).join(''):`<div class="empty">Nothing found</div>`;
 }
@@ -453,27 +519,24 @@ function showSubPage(catId, push){
   const cat=getCat(catId);
   setHeader(cat.emoji+' '+cat.label, true, false);
   showPage('pgSub');
-  // chips
   const allItems=inv.filter(i=>cat.subs.some(s=>s.id===i.subcat));
   const low=allItems.filter(i=>status(i)==='low').length;
   const out=allItems.filter(i=>status(i)==='out').length;
-  document.getElementById('subChips').innerHTML=
-    `<div class="chip ok">${allItems.filter(i=>i.q>0).length}/${allItems.length} in stock</div>`+
-    (low?`<div class="chip warn">⚠️ ${low} low</div>`:'')+
-    (out?`<div class="chip danger">❌ ${out} out</div>`:'');
-  // grid
+  const inStock=allItems.filter(i=>i.q>0).length;
+  paintBanner('subBanner',cat.emoji,cat.label, inStock+' in stock · '+allItems.length+' items'+(low?' · '+low+' low':'')+(out?' · '+out+' out':''), cat.color);
+  setBg(catId);
+  document.getElementById('subChips').innerHTML='';
   document.getElementById('subGrid').innerHTML=cat.subs.map(sub=>{
     const items=inv.filter(i=>i.subcat===sub.id);
     const subLow=items.filter(i=>status(i)==='low').length;
     const subOut=items.filter(i=>status(i)==='out').length;
-    const inStock=items.filter(i=>i.q>0).length;
+    const inS=items.filter(i=>i.q>0).length;
     const bc=subOut?'badge-danger':subLow?'badge-warn':'badge-ok';
-    const bv=subOut||subLow||inStock;
-    return`<div class="card" onclick="navSub('${catId}','${sub.id}')">
-      <div class="card-stripe" style="background:${cat.color}88"></div>
-      <span class="card-ico">${sub.emoji}</span>
+    const bv=subOut||subLow||inS;
+    return`<div class="card cat-card" style="background:linear-gradient(155deg,${tint(cat.color,0.16)},${tint(cat.color,0.04)} 62%,rgba(255,255,255,0.02));border-color:${tint(cat.color,0.24)};box-shadow:0 14px 28px -20px ${tint(cat.color,0.85)}" onclick="navSub('${catId}','${sub.id}')">
+      <div class="cat-ico" style="background:${tint(cat.color,0.16)};border:1px solid ${tint(cat.color,0.32)}">${sub.emoji}</div>
       <div class="card-name">${sub.label}</div>
-      <div class="card-sub">${items.length} item${items.length!==1?'s':''}${inStock?' · '+inStock+' in stock':''}</div>
+      <div class="card-sub">${items.length} item${items.length!==1?'s':''}${inS?' · '+inS+' in stock':''}</div>
       ${items.length?`<div class="card-badge ${bc}">${bv}</div>`:''}
     </div>`;
   }).join('');
@@ -494,6 +557,10 @@ function showItemsPage(catId, subId, push){
   const title=sub?(cat.emoji+' '+cat.label+' › '+sub.emoji+' '+sub.label):(cat.emoji+' '+cat.label);
   setHeader(title, true, true);
   showPage('pgItems');
+  const list=getItems(catId,subId);
+  const inS=list.filter(i=>i.q>0).length, lw=list.filter(i=>status(i)==='low').length, ot=list.filter(i=>status(i)==='out').length;
+  paintBanner('itemsBanner', sub?sub.emoji:cat.emoji, sub?sub.label:cat.label, inS+' in stock · '+list.length+' items'+(lw?' · '+lw+' low':'')+(ot?' · '+ot+' out':''), cat.color);
+  setBg(catId);
   renderFilters(catId,subId);
   renderItemsList(catId,subId);
 }
@@ -535,7 +602,7 @@ function renderItemsList(catId,subId){
 function itemHTML(i){
   const s=status(i);
   return`<div class="item ${s==='ok'?'':s}" id="item-${i.id}" onclick="openEdit('${i.id}')">
-    <div class="item-ico">${i.e}</div>
+    <div class="item-ico">${iconBadge(i.e,i.n)}</div>
     <div class="item-body">
       <div class="item-name">${i.n}</div>
       <div class="item-sub"><span class="dot ${s==='ok'?'':s}"></span>${s==='out'?'Out of stock':s==='low'?'Low stock':'In stock'}${i.u?' · '+i.u:''}</div>
@@ -585,7 +652,7 @@ function openAdd(prefill,bc){
   document.getElementById('fcat').value=defCat;
   populateSubSelect(defCat);
   if(defSub) document.getElementById('fsub').value=defSub;
-  selEmoji=getCat(defCat)?.emoji||'📦';
+  selEmoji=''; eCatSel=null;
   if(bc){document.getElementById('fbc').value=bc;document.getElementById('bcRow').style.display='';}
   else document.getElementById('bcRow').style.display='none';
   renderEmojiPicker();
@@ -607,7 +674,7 @@ function openEdit(id){
   document.getElementById('delRow').style.display='block';
   if(i.barcode){document.getElementById('fbc').value=i.barcode;document.getElementById('bcRow').style.display='';}
   else document.getElementById('bcRow').style.display='none';
-  selEmoji=i.e;
+  selEmoji=i.e||''; eCatSel=iconGroup(i.e);
   renderEmojiPicker();
   document.getElementById('addOv').classList.add('on');
 }
@@ -628,15 +695,22 @@ function populateSubSelect(catId){
 function onCatChange(){
   const catId=document.getElementById('fcat').value;
   populateSubSelect(catId);
-  selEmoji=getCat(catId)?.emoji||'📦';
   renderEmojiPicker();
 }
 
+function iconGroup(w){ for(const g in ICON_WORDS){ if(ICON_WORDS[g].includes(w)) return g; } return null; }
+function iconBadge(val,name){
+  let v=(val||'').toString();
+  if(!v){ v=((name||'?').trim().charAt(0)||'?').toUpperCase(); }
+  const len=[...v].length;
+  const fs = len<=2?'20px':len<=4?'13px':len<=6?'11px':len<=9?'9.5px':'8.5px';
+  return `<span class="iconbadge" style="font-size:${fs}">${v}</span>`;
+}
 function renderEmojiPicker(){
-  const cats=Object.keys(EMOJI_CATS);
-  if(!eCatSel) eCatSel=cats[0];
+  const cats=Object.keys(ICON_WORDS);
+  if(!eCatSel||!ICON_WORDS[eCatSel]) eCatSel=cats[0];
   document.getElementById('ecats').innerHTML=cats.map(c=>`<div class="ecat ${c===eCatSel?'on':''}" onclick="setECat('${c}')">${c}</div>`).join('');
-  document.getElementById('egrid').innerHTML=EMOJI_CATS[eCatSel].map(e=>`<div class="eo ${e===selEmoji?'sel':''}" onclick="pickE('${e}')">${e}</div>`).join('');
+  document.getElementById('egrid').innerHTML=ICON_WORDS[eCatSel].map(w=>`<div class="eo ${w===selEmoji?'sel':''}" onclick="pickE('${w.replace(/'/g,"\\'")}')">${w}</div>`).join('');
 }
 function setECat(c){eCatSel=c;renderEmojiPicker();}
 function pickE(e){selEmoji=e;renderEmojiPicker();}
@@ -695,6 +769,83 @@ function doExport(){
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));
   a.download='pantry.csv';a.click();toast('📥 Exported');
+}
+
+/* ── BACKUP & RESTORE ─────────────────────────────────────────────────
+   Auto-snapshots a complete copy of the inventory (items+barcodes+structure)
+   into localStorage on every save, so a bad sync/crash can be undone with
+   one tap. Also supports a downloadable full backup file + restore-from-file. */
+const BAK_APP='pantry', BAK_KEY=KEY+'_bak';
+function snapshotData(){ return {items:inv,barcodes:barcodes,structure:STRUCTURE}; }
+function readBackups(){ try{return JSON.parse(localStorage.getItem(BAK_KEY)||'[]');}catch(e){return [];} }
+function autoBackup(){
+  try{
+    let hist=readBackups();
+    const snap={app:BAK_APP,ts:Date.now(),n:inv.length,data:JSON.stringify(snapshotData())};
+    // Collapse rapid edits: replace newest if it's under a minute old, else add new
+    if(hist.length && (snap.ts - hist[0].ts) < 60000) hist[0]=snap; else hist.unshift(snap);
+    hist=hist.slice(0,6);
+    // Write, trimming oldest if storage quota is hit (large photo data etc.)
+    while(hist.length){ try{ localStorage.setItem(BAK_KEY,JSON.stringify(hist)); break; }catch(e){ hist.pop(); } }
+  }catch(e){ console.warn('autoBackup failed',e); }
+}
+function applyRestore(d){
+  if(!d||!Array.isArray(d.items)){ toast('Backup unreadable'); return false; }
+  inv=d.items; barcodes=d.barcodes||{}; if(Array.isArray(d.structure)&&d.structure.length) STRUCTURE=d.structure;
+  saveData(); renderHomeGrid(); renderHomeChips();
+  const top=navStack[navStack.length-1];
+  if(top.type==='items') renderItemsList(top.catId,top.subId);
+  else if(top.type==='sub') showSubPage(top.catId,false);
+  return true;
+}
+function downloadBackup(){
+  const blob=new Blob([JSON.stringify({app:BAK_APP,ts:Date.now(),version:1,data:snapshotData()})],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=BAK_APP+'-backup-'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000); toast('💾 Backup saved');
+}
+function parseCsvBackup(text){
+  const rows=[]; let row=[],cur='',q=false;
+  for(let i=0;i<text.length;i++){const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
+    else { if(c==='"')q=true; else if(c===','){row.push(cur);cur='';} else if(c==='\n'){row.push(cur);rows.push(row);row=[];cur='';} else if(c!=='\r')cur+=c; }
+  }
+  if(cur!==''||row.length){ row.push(cur); rows.push(row); }
+  rows.shift(); // header
+  const items=rows.filter(r=>r[0]&&r[0].trim()).map(r=>({id:uid(),n:r[0],cat:r[1]||'',subcat:r[2]||null,q:parseInt(r[3])||0,u:r[4]||'',t:2,e:''}));
+  return {items,barcodes:{},structure:STRUCTURE};
+}
+function onBackupFile(e){
+  const f=e.target.files&&e.target.files[0]; e.target.value=''; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      let d;
+      if(f.name.toLowerCase().endsWith('.csv')) d=parseCsvBackup(r.result);
+      else { const o=JSON.parse(r.result); d=o.data&&o.data.items?o.data:(Array.isArray(o.items)?o:null); }
+      if(!d||!Array.isArray(d.items)){ toast('Not a valid backup file'); return; }
+      if(!confirm('Restore '+d.items.length+' items from this file? Your current data will be replaced.')) return;
+      if(applyRestore(d)){ toast('✅ Restored '+d.items.length+' items'); renderBackup(); }
+    }catch(err){ toast('Could not read that file'); }
+  };
+  r.readAsText(f);
+}
+function restoreSnapshot(i){
+  const s=readBackups()[i]; if(!s) return;
+  if(!confirm('Restore backup from '+new Date(s.ts).toLocaleString()+' ('+s.n+' items)? Your current data will be replaced.')) return;
+  try{ const d=JSON.parse(s.data); if(applyRestore(d)){ toast('✅ Restored '+d.items.length+' items'); renderBackup(); } }
+  catch(e){ toast('Backup unreadable'); }
+}
+function openBackup(){ renderBackup(); document.getElementById('bakOv').classList.add('on'); }
+function closeBackup(){ document.getElementById('bakOv').classList.remove('on'); }
+function renderBackup(){
+  const el=document.getElementById('bakList'); if(!el) return;
+  const hist=readBackups();
+  if(!hist.length){ el.innerHTML='<div style="font-size:12px;color:var(--muted)">No automatic backups yet — they’re saved as you make changes.</div>'; return; }
+  el.innerHTML=hist.map((s,i)=>`<div style="display:flex;align-items:center;gap:9px;background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:10px 11px;margin-bottom:8px">
+    <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">${new Date(s.ts).toLocaleString()}${i===0?' · latest':''}</div>
+    <div style="font-size:12px;color:var(--muted)">${s.n} items</div></div>
+    <button class="btn btn-p" style="flex:0 0 auto;padding:9px 14px" onclick="restoreSnapshot(${i})">Restore</button></div>`).join('');
 }
 
 // ── SCANNER ───────────────────────────────────────────────────────────
