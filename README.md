@@ -8,10 +8,10 @@ your own Home Assistant and shared across every device that opens it.
 > No cloud account, no external server, no API token. The app is served by this
 > integration and talks only to your own HA instance.
 
-> Tracking a workshop or garage too? See the sister integration **[Stash](https://github.com/trstan84/ha-stash)** — same app, tool/hardware categories.
+> Tracking a workshop or garage too? See the sister integration **[Stash](https://github.com/tristan84/ha-stash)** — same app, tool/hardware categories.
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=trstan84&repository=ha-pantry&category=integration)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=tristan84&repository=ha-pantry&category=integration)
 
 ## Features
 
@@ -28,11 +28,11 @@ your own Home Assistant and shared across every device that opens it.
 
 ### 1 · Add the repository to HACS
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=trstan84&repository=ha-pantry&category=integration)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=tristan84&repository=ha-pantry&category=integration)
 
 Click the button above (it opens HACS with this repo pre-filled) → **Download**.
 Or do it manually: HACS → **⋮** → **Custom repositories** → add
-`https://github.com/trstan84/ha-pantry` as an **Integration**, then download it.
+`https://github.com/tristan84/ha-pantry` as an **Integration**, then download it.
 
 Then **restart Home Assistant**.
 
